@@ -1,0 +1,15 @@
+# Java ignored files
+.mtj.tmp/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+/bin/
+/obj/
+
+# VSCode ignored files
+.vscode/
+.code-workspace
