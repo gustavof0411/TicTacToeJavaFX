@@ -6,6 +6,14 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     public static void main(String[] args) throws Exception {
+/*         Table tabletest = new Table(3);
+        for (int i = 0; i<tabletest.getTable().length; i++){
+            String row = "";
+            for (int j = 0; j < tabletest.getTable().length; j++){
+                row = row + Integer.toString(tabletest.getTable()[i][j]) + " ";
+            }
+            System.out.println(row);
+        } */
         launch(args);
     }
 

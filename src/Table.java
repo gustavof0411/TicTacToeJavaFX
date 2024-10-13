@@ -4,6 +4,11 @@ public class Table {
 
     public Table(int size){
         this.table = new int[size][size];
+        for (int i = 0; i<this.table.length; i++){
+            for (int j = 0; j<this.table.length; j++){
+                this.table[i][j] = 0;
+            }
+        }
     }
 
     public int[][] getTable() {
