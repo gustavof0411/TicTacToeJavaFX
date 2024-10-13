@@ -32,20 +32,23 @@ public class Controller {
 
     private int playerturn = 0;
 
+    private int gridSize = 300;
+
     @FXML
     public void setTable(ActionEvent event) {
         t = new Table(Integer.parseInt(selecttablesize.getText()));
         for (int j = 0; j < t.getTable().length - 1; j++) {
-            gridtest.getColumnConstraints().add(new ColumnConstraints(30));
+            gridtest.getColumnConstraints().add(new ColumnConstraints(Math.round(gridSize / t.getTable().length)));
         }
         for (int k = 0; k < t.getTable().length - 1; k++) {
-            gridtest.getRowConstraints().add(new RowConstraints(30));
+            gridtest.getRowConstraints().add(new RowConstraints(Math.round(gridSize / t.getTable().length)));
         }
         for (int i = 0; i < t.getTable().length; i++) {
             for (int j = 0; j < t.getTable().length; j++) {
                 System.out.println(t.getTable()[i][j]);
                 Color fill = new Color(0, 0, 0, 0);
-                Rectangle rec = new Rectangle(29, 29, fill);
+                Rectangle rec = new Rectangle(Math.round(gridSize / t.getTable().length),
+                        Math.round(gridSize / t.getTable().length), fill);
                 GridPane.setHalignment(rec, HPos.CENTER);
                 GridPane.setValignment(rec, VPos.CENTER);
                 GridPane.setConstraints(rec, i, j);
@@ -68,20 +71,21 @@ public class Controller {
                 });
 
                 if (i < t.getTable().length - 1) {
-                    Line lineV = new Line(0, 0, 0, 30);
+                    Line lineV = new Line(0, 0, 0, Math.round(gridSize / t.getTable().length));
                     GridPane.setConstraints(lineV, i, j);
                     GridPane.setHalignment(lineV, HPos.RIGHT);
                     GridPane.setValignment(lineV, VPos.CENTER);
                     gridtest.getChildren().add(lineV);
                 }
                 if (j < t.getTable().length - 1) {
-                    Line lineH = new Line(0, 0, 30, 0);
+                    Line lineH = new Line(0, 0, Math.round((gridSize / t.getTable().length)), 0);
                     GridPane.setConstraints(lineH, i, j);
                     GridPane.setHalignment(lineH, HPos.CENTER);
                     GridPane.setValignment(lineH, VPos.BOTTOM);
                     gridtest.getChildren().add(lineH);
                 }
                 gridtest.getChildren().add(rec);
+
             }
         }
     }
