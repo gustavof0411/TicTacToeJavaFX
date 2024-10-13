@@ -1,15 +1,18 @@
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 public class Controller {
 
@@ -46,8 +49,27 @@ public class Controller {
                     circle.setStroke(stroke);
                     GridPane.setHalignment(circle, HPos.CENTER);
                     GridPane.setValignment(circle, VPos.CENTER);
+                    Rectangle rec = new Rectangle(29, 29);
+                    GridPane.setHalignment(rec, HPos.CENTER);
+                    GridPane.setValignment(rec, VPos.CENTER);
+                    GridPane.setConstraints(rec, i, j);
                     GridPane.setConstraints(circle, i, j);
-                    gridtest.getChildren().add(circle);
+
+                    rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                        @Override
+
+                        public void handle(MouseEvent e) {
+
+                            // want to get column index =0 and row index=0
+
+                            System.out.println("Row: " + GridPane.getRowIndex(rec) + " Column: " + GridPane.getColumnIndex(rec));
+
+                        }
+
+                    });
+                    gridtest.getChildren().addAll(circle, rec);
+
                 } else {
                     Line lineLeft = new Line(0, 0, 15, 15);
                     Line lineRight = new Line(0, 15, 15, 0);
@@ -58,8 +80,23 @@ public class Controller {
                     GridPane.setValignment(lineRight, VPos.CENTER);
                     GridPane.setConstraints(lineLeft, i, j);
                     GridPane.setConstraints(lineRight, i, j);
+                    Rectangle rec = new Rectangle(29, 29);
+                    GridPane.setHalignment(rec, HPos.CENTER);
+                    GridPane.setValignment(rec, VPos.CENTER);
+                    GridPane.setConstraints(rec, i, j);
 
-                    gridtest.getChildren().addAll(lineLeft, lineRight);
+                    rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                        @Override
+                        public void handle(MouseEvent e) {
+
+                            System.out.println("Row: " + GridPane.getRowIndex(rec) + " Column: " + GridPane.getColumnIndex(rec));
+
+                        }
+
+                    });
+
+                    gridtest.getChildren().addAll(lineLeft, lineRight, rec);
                 }
             }
         }
