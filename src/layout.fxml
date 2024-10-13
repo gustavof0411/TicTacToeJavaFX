@@ -42,6 +42,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <children>
@@ -86,7 +87,7 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="button" layoutX="278.0" layoutY="208.0" mnemonicParsing="false" onAction="#onPressed" text="Button" />
+            <Button fx:id="button" layoutX="557.0" layoutY="323.0" mnemonicParsing="false" onAction="#onPressed" text="Button" />
             <GridPane fx:id="grid" alignment="CENTER" layoutX="154.0" layoutY="42.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -99,6 +100,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
             </GridPane>
+            <Line fx:id="linewin" endX="100.0" layoutX="115.0" layoutY="361.0" startX="-100.0" visible="false" />
       </children>
     </AnchorPane>
   </children>
