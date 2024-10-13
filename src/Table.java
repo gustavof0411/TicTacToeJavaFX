@@ -1,17 +1,17 @@
 public class Table {
 
-    private int[] table;
+    private int[][] table;
 
     public Table(int size){
-        this.table = new int[size];
+        this.table = new int[size][size];
     }
 
-    public int[] getTable() {
+    public int[][] getTable() {
         return table;
     }
 
 
-    public void setTable(int[] table) {
+    public void setTable(int[][] table) {
         this.table = table;
     }
 

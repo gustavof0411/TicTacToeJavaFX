@@ -12,26 +12,20 @@ public class Controller {
     @FXML
     private GridPane grid;
 
-    @FXML
-    private Label label;
-
     Table t = new Table(3);
 
     @FXML
     public void onPressed(ActionEvent event){
         t = new Table(3);
         for (int i = 0; i<t.getTable().length; i++){
-            t.getTable()[i] = 0;
-            System.out.println("yeah");
+            for (int j = 0; j<t.getTable().length; j++){
+                t.getTable()[i][j] = 0;
+                Label label = new Label("O");
+                GridPane.setConstraints(label,i,j);
+                System.out.println(t.getTable()[i][j]);
+                grid.getChildren().addAll(label);
+            }
         }
-        Label label2 = new Label("O");
-        Label label3 = new Label("O");
-        Label label4 = new Label("O");
-        GridPane.setConstraints(label2, 0, 0);
-        GridPane.setConstraints(label3, 1, 0);
-        GridPane.setConstraints(label4, 2, 0);
-
-        grid.getChildren().addAll(label2, label3, label4);
     }
 
 }
