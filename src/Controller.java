@@ -33,7 +33,7 @@ public class Controller {
     private int playerturn = 0;
 
     @FXML
-    public void onPressed(ActionEvent event) {
+    public void setTable(ActionEvent event) {
         t = new Table(Integer.parseInt(selecttablesize.getText()));
         for (int j = 0; j < t.getTable().length - 1; j++) {
             gridtest.getColumnConstraints().add(new ColumnConstraints(30));
@@ -66,6 +66,21 @@ public class Controller {
                     }
 
                 });
+
+                if (i < t.getTable().length - 1) {
+                    Line lineV = new Line(0, 0, 0, 30);
+                    GridPane.setConstraints(lineV, i, j);
+                    GridPane.setHalignment(lineV, HPos.RIGHT);
+                    GridPane.setValignment(lineV, VPos.CENTER);
+                    gridtest.getChildren().add(lineV);
+                }
+                if (j < t.getTable().length - 1) {
+                    Line lineH = new Line(0, 0, 30, 0);
+                    GridPane.setConstraints(lineH, i, j);
+                    GridPane.setHalignment(lineH, HPos.CENTER);
+                    GridPane.setValignment(lineH, VPos.BOTTOM);
+                    gridtest.getChildren().add(lineH);
+                }
                 gridtest.getChildren().add(rec);
             }
         }
