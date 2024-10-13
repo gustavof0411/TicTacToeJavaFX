@@ -20,18 +20,26 @@ public class Controller {
     Table t = new Table(3);
 
     @FXML
-    public void onPressed(ActionEvent event){
+    public void onPressed(ActionEvent event) {
         t = new Table(3);
-        for (int i = 0; i<t.getTable().length; i++){
-            for (int j = 0; j<t.getTable().length; j++){
+        for (int i = 0; i < t.getTable().length; i++) {
+            for (int j = 0; j < t.getTable().length; j++) {
                 t.getTable()[i][j] = 0;
-                Color stroke = new Color(0,0,0,1);
-                Color fill = new Color(0,0,0,0);          
-                Circle circle = new Circle(15, fill);
-                circle.setStroke(stroke);
-                //Button button = new Button(Integer.toString(t.getTable()[i][j]));
-                GridPane.setConstraints(circle,i,j);
-                grid.getChildren().addAll(circle);
+                if (i % 2 == 0) {
+                    Color stroke = new Color(0, 0, 0, 1);
+                    Color fill = new Color(0, 0, 0, 0);
+                    Circle circle = new Circle(10, fill);
+                    circle.setStroke(stroke);
+                    GridPane.setConstraints(circle, i, j);
+                    grid.getChildren().add(circle);
+                } else {
+                    Line lineLeft = new Line(0, 0, 15, 15);
+                    Line lineRight = new Line(0, 15, 15, 0);
+                    // Button button = new Button(Integer.toString(t.getTable()[i][j]));
+                    GridPane.setConstraints(lineLeft, i, j);
+                    GridPane.setConstraints(lineRight, i, j);
+                    grid.getChildren().addAll(lineLeft, lineRight);
+                }
             }
         }
         linewin.setStartX(0);
