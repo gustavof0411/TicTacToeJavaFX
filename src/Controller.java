@@ -30,6 +30,8 @@ public class Controller {
 
     private Table t;
 
+    private int playerturn = 0;
+
     @FXML
     public void onPressed(ActionEvent event) {
         t = new Table(Integer.parseInt(selecttablesize.getText()));
@@ -41,70 +43,63 @@ public class Controller {
         }
         for (int i = 0; i < t.getTable().length; i++) {
             for (int j = 0; j < t.getTable().length; j++) {
-                t.getTable()[i][j] = 0;
-                if (i % 2 == 0) {
-                    Color stroke = new Color(0, 0, 0, 1);
-                    Color fill = new Color(0, 0, 0, 0);
-                    Circle circle = new Circle(10, fill);
-                    circle.setStroke(stroke);
-                    GridPane.setHalignment(circle, HPos.CENTER);
-                    GridPane.setValignment(circle, VPos.CENTER);
-                    Rectangle rec = new Rectangle(29, 29);
-                    GridPane.setHalignment(rec, HPos.CENTER);
-                    GridPane.setValignment(rec, VPos.CENTER);
-                    GridPane.setConstraints(rec, i, j);
-                    GridPane.setConstraints(circle, i, j);
+                System.out.println(t.getTable()[i][j]);
+                Color fill = new Color(0, 0, 0, 0);
+                Rectangle rec = new Rectangle(29, 29, fill);
+                GridPane.setHalignment(rec, HPos.CENTER);
+                GridPane.setValignment(rec, VPos.CENTER);
+                GridPane.setConstraints(rec, i, j);
 
-                    rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-                        @Override
+                    @Override
+                    public void handle(MouseEvent e) {
 
-                        public void handle(MouseEvent e) {
-
-                            // want to get column index =0 and row index=0
-
-                            System.out.println("Row: " + GridPane.getRowIndex(rec) + " Column: " + GridPane.getColumnIndex(rec));
-
+                        System.out.println(
+                                "Row: " + GridPane.getRowIndex(rec) + " Column: " + GridPane.getColumnIndex(rec));
+                        if (playerturn == 0) {
+                            addCircle(GridPane.getRowIndex(rec), GridPane.getColumnIndex(rec));
+                        } else {
+                            addX(GridPane.getRowIndex(rec), GridPane.getColumnIndex(rec));
                         }
 
-                    });
-                    gridtest.getChildren().addAll(circle, rec);
+                    }
 
-                } else {
-                    Line lineLeft = new Line(0, 0, 15, 15);
-                    Line lineRight = new Line(0, 15, 15, 0);
-                    // Button button = new Button(Integer.toString(t.getTable()[i][j]));
-                    GridPane.setHalignment(lineLeft, HPos.CENTER);
-                    GridPane.setValignment(lineLeft, VPos.CENTER);
-                    GridPane.setHalignment(lineRight, HPos.CENTER);
-                    GridPane.setValignment(lineRight, VPos.CENTER);
-                    GridPane.setConstraints(lineLeft, i, j);
-                    GridPane.setConstraints(lineRight, i, j);
-                    Rectangle rec = new Rectangle(29, 29);
-                    GridPane.setHalignment(rec, HPos.CENTER);
-                    GridPane.setValignment(rec, VPos.CENTER);
-                    GridPane.setConstraints(rec, i, j);
-
-                    rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-                        @Override
-                        public void handle(MouseEvent e) {
-
-                            System.out.println("Row: " + GridPane.getRowIndex(rec) + " Column: " + GridPane.getColumnIndex(rec));
-
-                        }
-
-                    });
-
-                    gridtest.getChildren().addAll(lineLeft, lineRight, rec);
-                }
+                });
+                gridtest.getChildren().add(rec);
             }
         }
-        linewin.setStartX(0);
-        linewin.setStartY(0);
-        linewin.setEndX(-100);
-        linewin.setEndY(-100);
-        linewin.setVisible(true);
+    }
+
+    private void addCircle(int row, int column) {
+        if (t.getTable()[row][column] == 0) {
+            t.getTable()[row][column] = 1;
+            Color stroke = new Color(0, 0, 0, 1);
+            Color fill = new Color(0, 0, 0, 0);
+            Circle circle = new Circle(10, fill);
+            circle.setStroke(stroke);
+            GridPane.setHalignment(circle, HPos.CENTER);
+            GridPane.setValignment(circle, VPos.CENTER);
+            GridPane.setConstraints(circle, column, row);
+            gridtest.getChildren().add(circle);
+            playerturn = 1;
+        }
+    }
+
+    private void addX(int row, int column) {
+        if (t.getTable()[row][column] == 0) {
+            t.getTable()[row][column] = 2;
+            Line lineLeft = new Line(0, 0, 15, 15);
+            Line lineRight = new Line(0, 15, 15, 0);
+            GridPane.setHalignment(lineLeft, HPos.CENTER);
+            GridPane.setValignment(lineLeft, VPos.CENTER);
+            GridPane.setHalignment(lineRight, HPos.CENTER);
+            GridPane.setValignment(lineRight, VPos.CENTER);
+            GridPane.setConstraints(lineLeft, column, row);
+            GridPane.setConstraints(lineRight, column, row);
+            gridtest.getChildren().addAll(lineLeft, lineRight);
+            playerturn = 0;
+        }
     }
 
 }
