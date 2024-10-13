@@ -1,7 +1,12 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -12,16 +17,25 @@ public class Controller {
     private Button button;
 
     @FXML
-    private GridPane grid;
-
-    @FXML
     private Line linewin;
 
-    Table t = new Table(3);
+    @FXML
+    private GridPane gridtest;
+
+    @FXML
+    private TextField selecttablesize;
+
+    private Table t;
 
     @FXML
     public void onPressed(ActionEvent event) {
-        t = new Table(3);
+        t = new Table(Integer.parseInt(selecttablesize.getText()));
+        for (int j = 0; j < t.getTable().length - 1; j++) {
+            gridtest.getColumnConstraints().add(new ColumnConstraints(30));
+        }
+        for (int k = 0; k < t.getTable().length - 1; k++) {
+            gridtest.getRowConstraints().add(new RowConstraints(30));
+        }
         for (int i = 0; i < t.getTable().length; i++) {
             for (int j = 0; j < t.getTable().length; j++) {
                 t.getTable()[i][j] = 0;
@@ -30,15 +44,22 @@ public class Controller {
                     Color fill = new Color(0, 0, 0, 0);
                     Circle circle = new Circle(10, fill);
                     circle.setStroke(stroke);
+                    GridPane.setHalignment(circle, HPos.CENTER);
+                    GridPane.setValignment(circle, VPos.CENTER);
                     GridPane.setConstraints(circle, i, j);
-                    grid.getChildren().add(circle);
+                    gridtest.getChildren().add(circle);
                 } else {
                     Line lineLeft = new Line(0, 0, 15, 15);
                     Line lineRight = new Line(0, 15, 15, 0);
                     // Button button = new Button(Integer.toString(t.getTable()[i][j]));
+                    GridPane.setHalignment(lineLeft, HPos.CENTER);
+                    GridPane.setValignment(lineLeft, VPos.CENTER);
+                    GridPane.setHalignment(lineRight, HPos.CENTER);
+                    GridPane.setValignment(lineRight, VPos.CENTER);
                     GridPane.setConstraints(lineLeft, i, j);
                     GridPane.setConstraints(lineRight, i, j);
-                    grid.getChildren().addAll(lineLeft, lineRight);
+
+                    gridtest.getChildren().addAll(lineLeft, lineRight);
                 }
             }
         }
