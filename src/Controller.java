@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -32,6 +33,9 @@ public class Controller {
     private int gridSize = 300;
 
     @FXML
+    private Label won;
+
+    @FXML
     public void setTable(ActionEvent event) {
         // Creating a new table of nxn size
         t = new Table(Integer.parseInt(tableSize.getText()));
@@ -58,23 +62,22 @@ public class Controller {
 
                     @Override
                     public void handle(MouseEvent e) {
+                        int row = GridPane.getRowIndex(rectangle);
+                        int column = GridPane.getColumnIndex(rectangle);
 
                         // Checks if the position hasn't been occupied yet (equals 0) before adding
                         // elements to it
-                        if (t.getTable()[GridPane.getRowIndex(rectangle)][GridPane.getColumnIndex(rectangle)] == 0) {
+                        if (t.getTable()[row][column] == 0) {
                             if (playerturn == 0) {
-                                addCircle(GridPane.getRowIndex(rectangle), GridPane.getColumnIndex(rectangle));
-                                System.out.println(
-                                        "Added Circle - Row: " + GridPane.getRowIndex(rectangle) + " Column: "
-                                                + GridPane.getColumnIndex(rectangle));
+                                addCircle(row, column);
+                                System.out.println("Added Circle - Row: " + row + " Column: " + column);
                             } else {
-                                addX(GridPane.getRowIndex(rectangle), GridPane.getColumnIndex(rectangle));
-                                System.out.println(
-                                        "Added X - Row: " + GridPane.getRowIndex(rectangle) + " Column: "
-                                                + GridPane.getColumnIndex(rectangle));
+                                addX(row, column);
+                                System.out.println("Added X - Row: " + row + " Column: " + column);
                             }
-
+                            verifyPosition(row, column);
                         }
+
                     }
 
                 });
@@ -146,6 +149,22 @@ public class Controller {
         GridPane.setConstraints(lineRight, column, row);
         tableGrid.getChildren().addAll(lineLeft, lineRight);
         playerturn = 0;
+    }
+
+    public void verifyPosition(int row, int column) {
+        // Messy, but just for checks. I'll organize it later.
+        if (row == column) {
+            t.verifyHorizontal(row);
+            t.verifyVertical(column);
+            t.verifyMainDiagonal();
+        } else {
+            t.verifyHorizontal(row);
+            t.verifyVertical(column);
+        }
+        t.verifySecondaryDiagonal();
+        if (t.getPlayerWon() != 0) {
+            won.setText("Player won");
+        }
     }
 
 }
