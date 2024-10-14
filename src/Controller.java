@@ -20,13 +20,10 @@ public class Controller {
     private Button button;
 
     @FXML
-    private Line linewin;
+    private GridPane tableGrid;
 
     @FXML
-    private GridPane gridtest;
-
-    @FXML
-    private TextField selecttablesize;
+    private TextField tableSize;
 
     private Table t;
 
@@ -36,89 +33,119 @@ public class Controller {
 
     @FXML
     public void setTable(ActionEvent event) {
-        t = new Table(Integer.parseInt(selecttablesize.getText()));
+        // Creating a new table of nxn size
+        t = new Table(Integer.parseInt(tableSize.getText()));
+
+        // Adding the columns to the table
         for (int j = 0; j < t.getTable().length - 1; j++) {
-            gridtest.getColumnConstraints().add(new ColumnConstraints(Math.round(gridSize / t.getTable().length)));
+            tableGrid.getColumnConstraints().add(new ColumnConstraints(Math.round(gridSize / t.getTable().length)));
         }
+        // Adding the rows to the table
         for (int k = 0; k < t.getTable().length - 1; k++) {
-            gridtest.getRowConstraints().add(new RowConstraints(Math.round(gridSize / t.getTable().length)));
+            tableGrid.getRowConstraints().add(new RowConstraints(Math.round(gridSize / t.getTable().length)));
         }
+        // Adding the mouse listeners (invisible rectangles) to each i,j grid position
         for (int i = 0; i < t.getTable().length; i++) {
             for (int j = 0; j < t.getTable().length; j++) {
-                System.out.println(t.getTable()[i][j]);
                 Color fill = new Color(0, 0, 0, 0);
-                Rectangle rec = new Rectangle(Math.round(gridSize / t.getTable().length),
+                Rectangle rectangle = new Rectangle(Math.round(gridSize / t.getTable().length),
                         Math.round(gridSize / t.getTable().length), fill);
-                GridPane.setHalignment(rec, HPos.CENTER);
-                GridPane.setValignment(rec, VPos.CENTER);
-                GridPane.setConstraints(rec, i, j);
+                GridPane.setHalignment(rectangle, HPos.CENTER);
+                GridPane.setValignment(rectangle, VPos.CENTER);
+                GridPane.setConstraints(rectangle, i, j);
 
-                rec.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
                     @Override
                     public void handle(MouseEvent e) {
 
-                        System.out.println(
-                                "Row: " + GridPane.getRowIndex(rec) + " Column: " + GridPane.getColumnIndex(rec));
-                        if (playerturn == 0) {
-                            addCircle(GridPane.getRowIndex(rec), GridPane.getColumnIndex(rec));
-                        } else {
-                            addX(GridPane.getRowIndex(rec), GridPane.getColumnIndex(rec));
-                        }
+                        // Checks if the position hasn't been occupied yet (equals 0) before adding
+                        // elements to it
+                        if (t.getTable()[GridPane.getRowIndex(rectangle)][GridPane.getColumnIndex(rectangle)] == 0) {
+                            if (playerturn == 0) {
+                                addCircle(GridPane.getRowIndex(rectangle), GridPane.getColumnIndex(rectangle));
+                                System.out.println(
+                                        "Added Circle - Row: " + GridPane.getRowIndex(rectangle) + " Column: "
+                                                + GridPane.getColumnIndex(rectangle));
+                            } else {
+                                addX(GridPane.getRowIndex(rectangle), GridPane.getColumnIndex(rectangle));
+                                System.out.println(
+                                        "Added X - Row: " + GridPane.getRowIndex(rectangle) + " Column: "
+                                                + GridPane.getColumnIndex(rectangle));
+                            }
 
+                        }
                     }
 
                 });
 
+                // Drawing the table grid (the "#")
                 if (i < t.getTable().length - 1) {
-                    Line lineV = new Line(0, 0, 0, Math.round(gridSize / t.getTable().length));
-                    GridPane.setConstraints(lineV, i, j);
-                    GridPane.setHalignment(lineV, HPos.RIGHT);
-                    GridPane.setValignment(lineV, VPos.CENTER);
-                    gridtest.getChildren().add(lineV);
+                    Line verticalLine = new Line(0, 0, 0, Math.round(gridSize / t.getTable().length));
+                    GridPane.setConstraints(verticalLine, i, j);
+                    GridPane.setHalignment(verticalLine, HPos.RIGHT);
+                    GridPane.setValignment(verticalLine, VPos.CENTER);
+                    tableGrid.getChildren().add(verticalLine);
                 }
                 if (j < t.getTable().length - 1) {
-                    Line lineH = new Line(0, 0, Math.round((gridSize / t.getTable().length)), 0);
-                    GridPane.setConstraints(lineH, i, j);
-                    GridPane.setHalignment(lineH, HPos.CENTER);
-                    GridPane.setValignment(lineH, VPos.BOTTOM);
-                    gridtest.getChildren().add(lineH);
+                    Line horizontalLine = new Line(0, 0, Math.round((gridSize / t.getTable().length)), 0);
+                    GridPane.setConstraints(horizontalLine, i, j);
+                    GridPane.setHalignment(horizontalLine, HPos.CENTER);
+                    GridPane.setValignment(horizontalLine, VPos.BOTTOM);
+                    tableGrid.getChildren().add(horizontalLine);
                 }
-                gridtest.getChildren().add(rec);
+
+                tableGrid.getChildren().add(rectangle);
 
             }
         }
     }
 
     private void addCircle(int row, int column) {
-        if (t.getTable()[row][column] == 0) {
-            t.getTable()[row][column] = 1;
-            Color stroke = new Color(0, 0, 0, 1);
-            Color fill = new Color(0, 0, 0, 0);
-            Circle circle = new Circle(10, fill);
-            circle.setStroke(stroke);
-            GridPane.setHalignment(circle, HPos.CENTER);
-            GridPane.setValignment(circle, VPos.CENTER);
-            GridPane.setConstraints(circle, column, row);
-            gridtest.getChildren().add(circle);
-            playerturn = 1;
-        }
+        t.getTable()[row][column] = 1;
+        Color stroke = new Color(0, 0, 0, 1); // Border at 100% opacity
+        Color fill = new Color(0, 0, 0, 0); // 0% opacity circle filling
+        double circleRadius = (gridSize / t.getTable().length) / 2;
+
+        // Percentage of the radius to be subtracted so that the circle won't fill the
+        // entire grid. 30% smaller.
+        double circleBorderPercentage = circleRadius * 0.3;
+
+        Circle circle = new Circle(circleRadius - circleBorderPercentage, fill);
+        circle.setStroke(stroke);
+
+        // Aligning the circle to the center and adding it into the grid
+        GridPane.setHalignment(circle, HPos.CENTER);
+        GridPane.setValignment(circle, VPos.CENTER);
+        GridPane.setConstraints(circle, column, row);
+        tableGrid.getChildren().add(circle);
+        playerturn = 1;
     }
 
     private void addX(int row, int column) {
-        if (t.getTable()[row][column] == 0) {
-            t.getTable()[row][column] = 2;
-            Line lineLeft = new Line(0, 0, 15, 15);
-            Line lineRight = new Line(0, 15, 15, 0);
-            GridPane.setHalignment(lineLeft, HPos.CENTER);
-            GridPane.setValignment(lineLeft, VPos.CENTER);
-            GridPane.setHalignment(lineRight, HPos.CENTER);
-            GridPane.setValignment(lineRight, VPos.CENTER);
-            GridPane.setConstraints(lineLeft, column, row);
-            GridPane.setConstraints(lineRight, column, row);
-            gridtest.getChildren().addAll(lineLeft, lineRight);
-            playerturn = 0;
-        }
+        t.getTable()[row][column] = 2;
+        float lineSize = gridSize / t.getTable().length;
+
+        // Percentage of the line length to be subtracted so that the "X" symbol won't
+        // fill the entire grid. 30% smaller.
+        double lineSizePercentage = lineSize * 0.3;
+
+        // "\" part of the "X" symbol
+        Line lineLeft = new Line(0, 0, lineSize - lineSizePercentage, lineSize - lineSizePercentage);
+        // "/" part of the X symbol
+        Line lineRight = new Line(0, lineSize - lineSizePercentage, lineSize - lineSizePercentage, 0);
+
+        // The "\" and "/" lines above are overlapped to form the "X"
+
+        // Aligning the lines to the center and adding it into the grid
+        GridPane.setHalignment(lineLeft, HPos.CENTER);
+        GridPane.setValignment(lineLeft, VPos.CENTER);
+        GridPane.setHalignment(lineRight, HPos.CENTER);
+        GridPane.setValignment(lineRight, VPos.CENTER);
+        GridPane.setConstraints(lineLeft, column, row);
+        GridPane.setConstraints(lineRight, column, row);
+        tableGrid.getChildren().addAll(lineLeft, lineRight);
+        playerturn = 0;
     }
 
 }
