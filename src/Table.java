@@ -4,6 +4,7 @@ public class Table {
     private int playerWon = 0;
     private int rowWon;
     private int columnWon;
+    private String winDirection = "";
 
     public Table(int size) {
         this.table = new int[size][size];
@@ -28,6 +29,7 @@ public class Table {
                     playerWon = firstElementDiagonal;
                     rowWon = 0;
                     columnWon = 0;
+                    winDirection = "Main Diagonal";
                 }
             }
         }
@@ -49,6 +51,7 @@ public class Table {
                     playerWon = firstElementDiagonal;
                     rowWon = 0;
                     columnWon = getTable().length-1;
+                    winDirection = "Secondary Diagonal";
                 }
             }
         }
@@ -68,6 +71,7 @@ public class Table {
                     playerWon = firstElementRow;
                     rowWon = row;
                     columnWon = column;
+                    winDirection = "Horizontal";
                 }
             }
         }
@@ -86,6 +90,7 @@ public class Table {
                     playerWon = firstElementColumn;
                     rowWon = row;
                     columnWon = column;
+                    winDirection = "Vertical";
                 }
             }
         }
@@ -109,6 +114,10 @@ public class Table {
 
     public int getPlayerWon() {
         return playerWon;
+    }
+
+    public String getWinDirection(){
+        return winDirection;
     }
 
 }

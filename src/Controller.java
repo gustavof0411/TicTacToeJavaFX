@@ -42,18 +42,18 @@ public class Controller {
 
         // Adding the columns to the table
         for (int j = 0; j < t.getTable().length - 1; j++) {
-            tableGrid.getColumnConstraints().add(new ColumnConstraints(Math.round(gridSize / t.getTable().length)));
+            tableGrid.getColumnConstraints().add(new ColumnConstraints(gridSize / t.getTable().length));
         }
         // Adding the rows to the table
         for (int k = 0; k < t.getTable().length - 1; k++) {
-            tableGrid.getRowConstraints().add(new RowConstraints(Math.round(gridSize / t.getTable().length)));
+            tableGrid.getRowConstraints().add(new RowConstraints(gridSize / t.getTable().length));
         }
         // Adding the mouse listeners (invisible rectangles) to each i,j grid position
         for (int i = 0; i < t.getTable().length; i++) {
             for (int j = 0; j < t.getTable().length; j++) {
                 Color fill = new Color(0, 0, 0, 0);
-                Rectangle rectangle = new Rectangle(Math.round(gridSize / t.getTable().length),
-                        Math.round(gridSize / t.getTable().length), fill);
+                Rectangle rectangle = new Rectangle(gridSize / t.getTable().length,
+                        gridSize / t.getTable().length, fill);
                 GridPane.setHalignment(rectangle, HPos.CENTER);
                 GridPane.setValignment(rectangle, VPos.CENTER);
                 GridPane.setConstraints(rectangle, i, j);
@@ -84,14 +84,14 @@ public class Controller {
 
                 // Drawing the table grid (the "#")
                 if (i < t.getTable().length - 1) {
-                    Line verticalLine = new Line(0, 0, 0, Math.round(gridSize / t.getTable().length));
+                    Line verticalLine = new Line(0, 0, 0, gridSize / t.getTable().length);
                     GridPane.setConstraints(verticalLine, i, j);
                     GridPane.setHalignment(verticalLine, HPos.RIGHT);
                     GridPane.setValignment(verticalLine, VPos.CENTER);
                     tableGrid.getChildren().add(verticalLine);
                 }
                 if (j < t.getTable().length - 1) {
-                    Line horizontalLine = new Line(0, 0, Math.round((gridSize / t.getTable().length)), 0);
+                    Line horizontalLine = new Line(0, 0, gridSize / t.getTable().length, 0);
                     GridPane.setConstraints(horizontalLine, i, j);
                     GridPane.setHalignment(horizontalLine, HPos.CENTER);
                     GridPane.setValignment(horizontalLine, VPos.BOTTOM);
@@ -154,7 +154,7 @@ public class Controller {
     public void verifyPosition(int row, int column) {
         // Checks both vertical and horizontal table positions by default for every turn
         t.verifyHorizontal(row, column);
-        t.verifyVertical(row,column);
+        t.verifyVertical(row, column);
 
         // Checks if the position belongs to the main diagonal (when i = j)
         if (row == column) {
@@ -169,7 +169,53 @@ public class Controller {
 
         if (t.getPlayerWon() != 0) {
             won.setText("Player who won: " + t.getPlayerWon());
+            drawVictoryLine(row, column);
         }
     }
 
+    public void drawVictoryLine(int row, int column) {
+        // Draws the line over the elements according to a direction
+        String winDirection = t.getWinDirection();
+        if (winDirection.equals("Main Diagonal")) {
+
+            for (int i = 0; i < t.getTable().length; i++) {
+                float lineSize = gridSize / t.getTable().length;
+                Line lineVictory = new Line(0, 0, lineSize, lineSize);
+                GridPane.setHalignment(lineVictory, HPos.CENTER);
+                GridPane.setValignment(lineVictory, VPos.CENTER);
+                GridPane.setConstraints(lineVictory, i, i);
+                tableGrid.getChildren().add(lineVictory);
+            }
+
+        } else if (winDirection.equals("Horizontal")) {
+            for (int i = 0; i < t.getTable().length; i++) {
+                float lineSize = gridSize / t.getTable().length;
+                Line lineVictory = new Line(0, 0, lineSize, 0);
+                GridPane.setHalignment(lineVictory, HPos.CENTER);
+                GridPane.setValignment(lineVictory, VPos.CENTER);
+                GridPane.setConstraints(lineVictory, i, row);
+                tableGrid.getChildren().add(lineVictory);
+            }
+        } else if (winDirection.equals("Vertical")) {
+            for (int i = 0; i < t.getTable().length; i++) {
+                float lineSize = gridSize / t.getTable().length;
+                Line lineVictory = new Line(0, 0, 0, lineSize);
+                GridPane.setHalignment(lineVictory, HPos.CENTER);
+                GridPane.setValignment(lineVictory, VPos.CENTER);
+                GridPane.setConstraints(lineVictory, column, i);
+                tableGrid.getChildren().add(lineVictory);
+            }
+        } else if (winDirection.equals("Secondary Diagonal")) {
+            int columnLine = t.getTable().length - 1;
+            for (int i = 0; i < t.getTable().length; i++) {
+                float lineSize = gridSize / t.getTable().length;
+                Line lineVictory = new Line(0, lineSize, lineSize, 0);
+                GridPane.setHalignment(lineVictory, HPos.CENTER);
+                GridPane.setValignment(lineVictory, VPos.CENTER);
+                GridPane.setConstraints(lineVictory, columnLine, i);
+                tableGrid.getChildren().add(lineVictory);
+                columnLine--;
+            }
+        }
+    }
 }
