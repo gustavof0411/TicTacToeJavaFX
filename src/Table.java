@@ -2,6 +2,8 @@ public class Table {
 
     private int[][] table;
     private int playerWon = 0;
+    private int rowWon;
+    private int columnWon;
 
     public Table(int size) {
         this.table = new int[size][size];
@@ -24,6 +26,8 @@ public class Table {
                 iterator++;
                 if (iterator == getTable().length) {
                     playerWon = firstElementDiagonal;
+                    rowWon = 0;
+                    columnWon = 0;
                 }
             }
         }
@@ -43,13 +47,15 @@ public class Table {
                 iteratorRow--;
                 if (iteratorColumn == getTable().length) {
                     playerWon = firstElementDiagonal;
+                    rowWon = 0;
+                    columnWon = getTable().length-1;
                 }
             }
         }
 
     }
 
-    public void verifyHorizontal(int row) {
+    public void verifyHorizontal(int row, int column) {
         // Checks if all the row's elements are equal
         int iterator = 1;
         int firstElementRow = getTable()[row][0]; // Index table[n][0]
@@ -60,12 +66,14 @@ public class Table {
                 iterator++;
                 if (iterator == getTable().length) {
                     playerWon = firstElementRow;
+                    rowWon = row;
+                    columnWon = column;
                 }
             }
         }
     }
 
-    public void verifyVertical(int column) {
+    public void verifyVertical(int row, int column) {
         // Checks if all the column's elements are equal
         int iterator = 1;
         int firstElementColumn = getTable()[0][column]; // Index table[0][n]
@@ -76,6 +84,8 @@ public class Table {
                 iterator++;
                 if (iterator == getTable().length) {
                     playerWon = firstElementColumn;
+                    rowWon = row;
+                    columnWon = column;
                 }
             }
         }
@@ -83,6 +93,14 @@ public class Table {
 
     public int[][] getTable() {
         return table;
+    }
+
+    public int getRowWon(){
+        return rowWon;
+    }
+
+    public int getColumnWon(){
+        return columnWon;
     }
 
     public void setTable(int[][] table) {

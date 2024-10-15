@@ -152,18 +152,23 @@ public class Controller {
     }
 
     public void verifyPosition(int row, int column) {
-        // Messy, but just for checks. I'll organize it later.
+        // Checks both vertical and horizontal table positions by default for every turn
+        t.verifyHorizontal(row, column);
+        t.verifyVertical(row,column);
+
+        // Checks if the position belongs to the main diagonal (when i = j)
         if (row == column) {
-            t.verifyHorizontal(row);
-            t.verifyVertical(column);
             t.verifyMainDiagonal();
-        } else {
-            t.verifyHorizontal(row);
-            t.verifyVertical(column);
         }
-        t.verifySecondaryDiagonal();
+
+        // Checks if the position belongs to the secondary diagonal (when
+        // rowSize-[i+j] = 1 or columnSize-[i+j] = 1, since it is a squared matrix)
+        if (t.getTable().length - (row + column) == 1) {
+            t.verifySecondaryDiagonal();
+        }
+
         if (t.getPlayerWon() != 0) {
-            won.setText("Player won");
+            won.setText("Player who won: " + t.getPlayerWon());
         }
     }
 
